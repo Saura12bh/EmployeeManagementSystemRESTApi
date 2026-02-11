@@ -18,12 +18,36 @@ Enter sal
 <input type="submit" value="Display Emp" onclick="dis()"><br><br>
 <table>
 <thead>
-<tr><th>eid</th><th>ename</th><th>sal</th></tr>
+<tr><th>eid    </th><th>ename  </th><th>sal  </th></tr>
 </thead>
 <tbody id="tb"></tbody>
 </table><br><br>
   
+  <!--search emp by id  -->
+  Enter Emp id to seach
+  <input type="text" id="sid">
+  <input type="button" value="search" onclick="search()">
+<br><br>
+<table>
+<thead>
+<tr><th>eid    </th><th>ename  </th><th>sal  </th></tr>
+</thead>
+<tbody id="tb1"></tbody>
+</table><br><br>
 
+<!-- Update  -->
+Enter id
+<input type="text" id="neweid"><br><br>
+Enter new  name
+<input type="text" id="newename"><br><br>
+Enter new sal
+<input type="text" id="newsal"><br><br>  
+<input type="submit" value="Update Emp" onclick="update()"><br><br>
+
+<!-- Delete -->
+Enter Emp id to delete  Emp:
+<input  type="text" id="did">
+<input type="button" value="delete emp" onclick="del()">
 <!--js code  -->
 <script type="text/javascript">
 	//save emp 
@@ -85,14 +109,101 @@ Enter sal
 		})
 	}
 	
-function  dis()
+function dis()
 {
 	fetch("display").
 	then((res)=>res.json()).
-	then().
+	then((data)=>{   //ya data madhe back end vrun yenari list ahe
+		let tb=document.getElementById("tb");
+		tb.innerHtml="";
+		data.forEach((ele)=>{  //yethe pratek emp cha data yeto 
+			let tr=document.createElement("tr");
+			let tdid=document.createElement("td");
+			tdid.innerText=ele.eid;
+			let tdn=document.createElement("td");
+			tdn.innerText=ele.ename;
+			let tds=document.createElement("td");
+			tds.innerText=ele.sal;
+			
+			tr.appendChild(tdid);
+			tr.appendChild(tdn);
+			tr.appendChild(tds);
+			
+			tb.appendChild(tr);    
+		});
+	}).
 	catch((err)=>{
 		alert(err);
-	})
+	});
+}
+
+function search()
+{
+	let eid=document.getElementById("sid").value;
+	fetch("search?eid="+eid).
+	then((res)=>res.json()).
+	then((data)=>{
+		let tb=document.getElementById("tb1");
+		tb.innerHtml="";
+		data.forEach((ele)=>{  //yethe pratek emp cha data yeto 
+			let tr=document.createElement("tr");
+			let tdid=document.createElement("td");
+			tdid.innerText=ele.eid;
+			let tdn=document.createElement("td");
+			tdn.innerText=ele.ename;
+			let tds=document.createElement("td");
+			tds.innerText=ele.sal;
+			
+			tr.appendChild(tdid);
+			tr.appendChild(tdn);
+			tr.appendChild(tds);
+			
+			tb.appendChild(tr);    
+		});
+	}).
+	catch((err)=>{
+		alert(err);
+	});
+}
+function update()
+{
+	let eid=document.getElementById("neweid").value;
+	let ename=document.getElementById("newename").value;
+	let sal=document.getElementById("newsal").value;
+	
+	let emp={
+			eid:eid,
+			ename:ename,
+			sal:sal
+	};
+	fetch("update",
+		{
+		method:"PUT",
+		headers:{"content-Type":"application/json"},
+		body:JSON.stringify(emp)
+		}	
+	).
+	then((res)=>res.text()).
+	then((data)=>{
+		alert(data);
+	}).
+	catch((err)=>{
+		alert(err);
+	});
+}
+function del()
+{
+	let eid=document.getElementById("did").value;
+	fetch("delete?eid="+eid,{
+		method:"DELETE"
+	}).
+	then((res)=>res.text()).
+	then((data)=>{
+		alert(data);
+	}).
+	catch((err)=>{
+		alert(err);
+	});
 }
 </script>
 
