@@ -2,6 +2,9 @@ package org.springMvc.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springMvc.exception.EmpNotFound;
 import org.springMvc.model.Emp;
 import org.springMvc.service.EmpService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@Controller    //->@Controlleradvice
+//@RestController  =>controller+responseBody  ->RestControllerAdvice
 public class HomeController {
 	
+	private static final Logger logger=LoggerFactory.getLogger(HomeController.class);
 	//service class object
 	@Autowired
 	EmpService empService;
@@ -25,6 +31,8 @@ public class HomeController {
 	@RequestMapping("/")
 	public String home()
 	{
+		logger.info("Application is start");
+
 		return "index";
 	}
 	
@@ -44,14 +52,10 @@ public class HomeController {
 	@ResponseBody   
 	public String save(@RequestBody Emp e)  
 	{
-		int v=empService.save(e);
-		if(v>0)
-		{
-			return"emp save succesfully";
-		}
-		else {
-			return "emp not save sucessfully";
-		}
+		logger.info("Emp save successfully");
+		empService.save(e);
+		return "emp save successfully";
+		
 	}
 	
 	//display
@@ -59,6 +63,7 @@ public class HomeController {
 	@ResponseBody
 	public List<Emp> display()   
 	{
+		logger.info("Emp display successfully");
 		List<Emp> list=empService.display();
 		return list;
 	}
@@ -68,6 +73,7 @@ public class HomeController {
 	@ResponseBody
 	public List<Emp> search(@RequestParam("eid") int eid)
 	{
+		logger.warn("Emp id ="+eid);
 		List<Emp>list=empService.search(eid);
 		return list;
 	}
@@ -77,13 +83,10 @@ public class HomeController {
 	@ResponseBody
 	public String update(@RequestBody Emp e)
 	{
-		int v=empService.update(e);
-		if(v>0)
-		{
+		logger.info("update emp succesfully");
+			empService.update(e);
 			return "emp update sucessfully";
-		}else {
-			return "emp delete sucessfully";	
-		}
+		
 		}
 	
      // delete 
@@ -91,13 +94,9 @@ public class HomeController {
 	@ResponseBody
 	public String delete(@RequestParam("eid") int eid)
 	{
-		int v=empService.delete(eid);
-		if(v>0)
-		{
+			logger.info("Delete emp succesfully");
+			empService.delete(eid);
 			return "emp delete Sucessfully";
-		}
-		else {
-			return "emp not deleted";
-		}
+		
 	}
 }

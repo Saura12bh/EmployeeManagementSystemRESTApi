@@ -17,8 +17,8 @@ public class EmpRepoImpl implements EmpRepo {
 	JdbcTemplate jdbcTemplate;
 
 	@Override
-	public int save(Emp e) {
-		return jdbcTemplate.update("insert into emp values(?,?,?)",e.getEid(),e.getEname(),e.getSal());
+	public void save(Emp e) {
+		 jdbcTemplate.update("insert into emp values(?,?,?)",e.getEid(),e.getEname(),e.getSal());
 	}
 
 	@Override
@@ -55,14 +55,14 @@ public class EmpRepoImpl implements EmpRepo {
 		}
 
 	@Override
-	public int update(Emp e) {
-		return jdbcTemplate.update("update emp set ename=?,sal=? where eid=?",e.getEname(),e.getSal(),e.getEid());
+	public void update(Emp e) {
+	   jdbcTemplate.update("update emp set ename=?,sal=? where eid=?",e.getEname(),e.getSal(),e.getEid());
 	}
 
 	@Override
-	public int delete(int eid) {
+	public void delete(int eid) {
 		// TODO Auto-generated method stub
-		return jdbcTemplate.update("delete from emp where eid=?",eid);
+		 jdbcTemplate.update("delete from emp where eid=?",eid);
 	}
 
 }

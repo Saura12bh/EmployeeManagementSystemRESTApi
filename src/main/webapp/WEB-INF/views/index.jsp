@@ -105,17 +105,25 @@ Enter Emp id to delete  Emp:
 			alert(msg);
 		}).
 		catch((err)=>{
-			alert(err);
+			alert(err.message);
 		})
 	}
 	
 function dis()
 {
-	fetch("display").
-	then((res)=>res.json()).
+	fetch("display").	
+	then((res)=>{
+		if(!res.ok)
+			{
+			return res.json().then((err)=>{
+				throw err;
+			});
+			}
+		return res.json();
+	}).
 	then((data)=>{   //ya data madhe back end vrun yenari list ahe
 		let tb=document.getElementById("tb");
-		tb.innerHtml="";
+		tb.innerHTML="";
 		data.forEach((ele)=>{  //yethe pratek emp cha data yeto 
 			let tr=document.createElement("tr");
 			let tdid=document.createElement("td");
@@ -133,7 +141,7 @@ function dis()
 		});
 	}).
 	catch((err)=>{
-		alert(err);
+		alert(err.message);
 	});
 }
 
@@ -141,10 +149,18 @@ function search()
 {
 	let eid=document.getElementById("sid").value;
 	fetch("search?eid="+eid).
-	then((res)=>res.json()).
+	then((res)=>{
+		if(!res.ok)
+			{
+			return res.json().then((err)=>{
+				throw err;
+			});
+			}
+		return res.json();
+	}).
 	then((data)=>{
 		let tb=document.getElementById("tb1");
-		tb.innerHtml="";
+		tb.innerHTML="";
 		data.forEach((ele)=>{  //yethe pratek emp cha data yeto 
 			let tr=document.createElement("tr");
 			let tdid=document.createElement("td");
@@ -162,7 +178,7 @@ function search()
 		});
 	}).
 	catch((err)=>{
-		alert(err);
+		alert(err.message);
 	});
 }
 function update()
@@ -183,12 +199,20 @@ function update()
 		body:JSON.stringify(emp)
 		}	
 	).
-	then((res)=>res.text()).
+	then((res)=>{
+		if(!res.ok)
+			{
+			return res.json().then((err)=>{
+				throw err;
+			});
+			}
+		return res.text();
+	}).
 	then((data)=>{
 		alert(data);
 	}).
 	catch((err)=>{
-		alert(err);
+		alert(err.message);
 	});
 }
 function del()
@@ -197,12 +221,20 @@ function del()
 	fetch("delete?eid="+eid,{
 		method:"DELETE"
 	}).
-	then((res)=>res.text()).
+	then((res)=>{
+		if(!res.ok)
+			{
+			return res.json().then((err)=>{
+				throw err;
+			});
+			}
+		return res.text();
+	}).
 	then((data)=>{
 		alert(data);
 	}).
 	catch((err)=>{
-		alert(err);
+		alert(err.message);
 	});
 }
 </script>
